@@ -1,79 +1,78 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Dating App
 
-# Getting Started
+## Overview
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+This project is a social media dating platform designed to help users find their matches based on preferences and interests. The application enables users to swipe right on profiles they like and left on those they don't. If two users swipe right on each other, they are matched and can start chatting, creating a seamless and enjoyable user experience.
 
-## Step 1: Start the Metro Server
+## Table of Contents
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [User Stories](#user-stories)
+- [App Architecture](#app-architecture)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+- [FAQ](#faq)
 
-To start Metro, run the following command from the _root_ of your React Native project:
+## Features
 
-```bash
-# using npm
-npm start
+- **User Profiles**: Create and manage detailed user profiles.
+- **Swipe Functionality**: Swipe right to like a profile and left to pass.
+- **Matching System**: Mutual right swipes result in a match.
+- **Chat Feature**: Real-time chat functionality with matched users.
+- **Image Uploads**: Store user photos securely using Cloudinary.
+- **User Preferences**: Set preferences for age, distance, and interests.
+- **Notifications**: Receive notifications for matches and messages.
+- **User Blocking**: Option to block users for a safer experience.
 
-# OR using Yarn
-yarn start
-```
+## Tech Stack
 
-## Step 2: Start your Application
+- **Frontend**: React Native with TypeScript
+- **Backend**: Node.js with Express
+- **Database**: MongoDB
+- **Image Storage**: Cloudinary
+- **Real-time Communication**: Socket.IO (for chat functionality)
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+## User Stories
 
-### For Android
+- **As a user**, I want to create a profile with my information and photos so that I can present myself effectively.
+- **As a user**, I want to swipe through profiles to find potential matches quickly.
+- **As a user**, I want to see who has liked my profile so that I can match with them.
+- **As a user**, I want to chat with my matches in real time to get to know them better.
+- **As a user**, I want to set my preferences to find matches that suit my interests and values.
 
-```bash
-# using npm
-npm run android
+## App Architecture
 
-# OR using Yarn
-yarn android
-```
+The application is structured into two main parts:
 
-### For iOS
+### Frontend
+- **Components**: Reusable UI components for consistency across the app.
+- **Screens**: Dedicated screens for Login, Signup, Home, and Chat functionalities.
+- **State Management**: Utilizes React Context or Redux for global state management (e.g., user authentication, matches).
 
-```bash
-# using npm
-npm run ios
+### Backend
+- **API Routes**: RESTful API endpoints for user authentication, profile management, and messaging.
+- **Database Models**: Mongoose models for Users, Matches, and Messages in MongoDB.
+- **Authentication**: JWT (JSON Web Tokens) for secure user sessions.
 
-# OR using Yarn
-yarn ios
-```
+## Getting Started
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+### Prerequisites
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+Make sure you have the following installed:
 
-## Step 3: Modifying your App
+- Node.js
+- MongoDB
+- React Native CLI
+- A code editor (like Visual Studio Code)
 
-Now that you have successfully run the app, let's modify it.
+### Installation
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/yourusername/dating-app.git
+   cd dating-app
