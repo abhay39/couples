@@ -2,12 +2,12 @@ import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 
-const Splash:React.FC = () => {
+const Splash = () => {
   const navigation=useNavigation();
 
-  setTimeout(()=>{
-    navigation.navigate('Sign in')
-  },3000)
+    setTimeout(()=>{
+      navigation.navigate('Sign in') // Fixed: 'Sign in' -> 'SignIn'
+    },3000)
 
   return (
     <View style={styles.container}>

@@ -1,25 +1,16 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native'
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions,useColorScheme } from 'react-native'
 import React, { useState } from 'react'
-import { Picker } from '@react-native-picker/picker'
 import { useNavigation } from '@react-navigation/native'
 
-type SignupInfoType={
-    email: string,
-    password: string,
-    fullName: string,
-    age: number,
-    gender: any
-}
-const Signup: React.FC = () => {
-    const color=useColorScheme();
-    const navigation=useNavigation()
-    const [loginData,setLoginData]=useState<SignupInfoType>({
-        email: '',
-        password: '',
-        fullName:"",
-        age: 0,
-        gender: ""
-    })
+
+
+const Login = () => {
+  const [loginData,setLoginData]=useState({
+    email: '',
+    password: ''
+  })
+  const color=useColorScheme();
+  const navigation=useNavigation()
 
     const isDisabled=!loginData.email || !loginData.password
     const handleLogin=async()=>{
@@ -39,20 +30,8 @@ const Signup: React.FC = () => {
         <Text style={[
           styles.headerText,
           {color:color==='dark'?"white":'blue'}
-        ]}>Sign up</Text>
+        ]}>Login</Text>
         <View style={styles.inputContainer}>
-            <Text style={[
-              styles.label,
-              {color:color==='dark'?"white":"black"}
-            ]}>Full name</Text>
-            <TextInput onChangeText={(e)=>{
-                setLoginData({...loginData, email: e })
-            }} style={[
-              {borderColor:color==='dark'?"white":"black"},
-              {color:color=='dark'?"white":"black"},
-              styles.input
-            ]} placeholder='Enter your full name' keyboardType="name-phone-pad" />
-
             <Text style={[
               styles.label,
               {color:color==='dark'?"white":"black"}
@@ -64,7 +43,6 @@ const Signup: React.FC = () => {
               {color:color=='dark'?"white":"black"},
               styles.input
             ]} placeholder='Enter your email address' keyboardType='email-address' />
-
             <Text style={[
               styles.label,
               {color:color==='dark'?"white":"black"}
@@ -76,42 +54,16 @@ const Signup: React.FC = () => {
               {color:color=='dark'?"white":"black"},
               styles.input
             ]} secureTextEntry={true} placeholder='Enter your password' />
-
-            <Text style={[
-              styles.label,
-              {color:color==='dark'?"white":"black"}
-            ]}>Age</Text>
-            <TextInput onChangeText={(e)=>{
-                setLoginData({...loginData, password: e })
-            }} style={[
-              {borderColor:color==='dark'?"white":"black"},
-              {color:color=='dark'?"white":"black"},
-              styles.input
-            ]} keyboardType="number-pad" placeholder='Enter your age' />
-            
-            <Text style={[
-              styles.label,
-              {color:color==='dark'?"white":"black"}
-            ]}>Gender</Text>
-            <Picker selectedValue={loginData.gender} onValueChange={(e)=>{
-                setLoginData({...loginData, gender: e })
-            }} style={{ height: 50,borderWidth:1,borderColor:'black', marginBottom:10,color:color=='dark'?'white':'black' }}>
-                <Picker.Item label="Select Gender" value="" />
-                <Picker.Item label="Male" value="male" />
-                <Picker.Item label="Female" value="female" />
-                <Picker.Item label="Other" value="other" />
-            </Picker>
-            
             <TouchableOpacity disabled={isDisabled} onPress={handleLogin} style={styles.button}>
-                <Text style={styles.buttonText}>Register</Text>
+                <Text style={styles.buttonText}>Login</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+                <Text style={styles.forgotText}>Forgot Password?</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={()=>{
-              navigation.navigate("Sign in")
+              navigation.navigate("Sign up")
             }}>
-                <Text style={[
-          styles.forgotText,
-          {color:color==='dark'?"white":'blue'}
-        ]}>Already have an account? Sign in</Text>
+                <Text style={styles.dntText}>Don't have an account? Sign up</Text>
             </TouchableOpacity>
         </View>
       </View>
@@ -119,7 +71,7 @@ const Signup: React.FC = () => {
   )
 }
 
-export default Signup
+export default Login
 
 const styles = StyleSheet.create({
   container: {
@@ -176,5 +128,11 @@ const styles = StyleSheet.create({
     color: 'blue',
     textDecorationLine: 'underline',
     textAlign:'right'
-  }
+  },
+  dntText:{
+    marginTop: 10,
+    color: 'red',
+    textDecorationLine: 'underline',
+    textAlign:'center'
+  },
 })

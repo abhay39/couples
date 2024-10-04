@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import StackNavigator from './utils/StackNavigator'
 import { StatusBar, useColorScheme } from 'react-native'
 
-const App:React.FC = () => {
+const App = () => {
   const color=useColorScheme();
   return (
     <NavigationContainer>

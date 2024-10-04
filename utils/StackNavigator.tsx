@@ -15,7 +15,6 @@ const StackNavigator = () => {
     <Stack.Navigator screenOptions={{
       headerShown:false,
     }}>
-      
         <Stack.Group>
             <Stack.Screen name="Splash" component={Splash} />
             <Stack.Screen name="Sign in" component={Login} />
