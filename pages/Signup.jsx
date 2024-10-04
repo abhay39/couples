@@ -2,23 +2,29 @@ import { Image, StyleSheet, Text, TextInput, TouchableOpacity, useColorScheme, V
 import React, { useState } from 'react'
 import { Picker } from '@react-native-picker/picker'
 import { useNavigation } from '@react-navigation/native'
+import { API_URL } from '@env';
 
 
 const Signup = () => {
-    const color=useColorScheme();
-    const navigation=useNavigation()
-    const [loginData,setLoginData]=useState({
-        email: '',
-        password: '',
-        fullName:"",
-        age: 0,
-        gender: ""
-    })
+  const color=useColorScheme();
+  const navigation=useNavigation()
+  const [loginData,setLoginData]=useState({
+      email: '',
+      password: '',
+      fullName:"",
+      age: 0,
+      gender: ""
+  })
 
-    const isDisabled=!loginData.email || !loginData.password
-    const handleLogin=async()=>{
-        console.log(loginData)
+  const isDisabled=!loginData.email || !loginData.password || !loginData.fullName || !loginData.gender || !loginData.age
+
+
+  const handleLogin=async()=>{
+    if(loginData.age<18){
+      
     }
+    console.log(loginData)
+  }
 
   return (
     <View style={[
@@ -40,7 +46,7 @@ const Signup = () => {
               {color:color==='dark'?"white":"black"}
             ]}>Full name</Text>
             <TextInput onChangeText={(e)=>{
-                setLoginData({...loginData, email: e })
+                setLoginData({...loginData, fullName: e })
             }} style={[
               {borderColor:color==='dark'?"white":"black"},
               {color:color=='dark'?"white":"black"},
@@ -76,7 +82,7 @@ const Signup = () => {
               {color:color==='dark'?"white":"black"}
             ]}>Age</Text>
             <TextInput onChangeText={(e)=>{
-                setLoginData({...loginData, password: e })
+                setLoginData({...loginData, age: e })
             }} style={[
               {borderColor:color==='dark'?"white":"black"},
               {color:color=='dark'?"white":"black"},
