@@ -1,21 +1,55 @@
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions,useColorScheme } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
-
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useToast } from 'react-native-toast-notifications';
 
 const Login = () => {
   const [loginData,setLoginData]=useState({
     email: '',
     password: ''
   })
+
   const color=useColorScheme();
   const navigation=useNavigation()
+  const toast=useToast();
 
-    const isDisabled=!loginData.email || !loginData.password
-    const handleLogin=async()=>{
-        console.log(loginData)
+  const isDisabled=!loginData.email || !loginData.password;
+
+  const handleLogin=async()=>{
+    let res= await fetch(`${process.env.API_URL}/auth/login`,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(loginData),
+    })
+    const status=res.status;
+    res=await res.json();
+    if(status===201){
+      await AsyncStorage.setItem('token', res.token);
+        toast.show(res.message, {
+          type: 'success',
+          topOffset: 20,
+          bottomOffset: 80,
+          duration: 4000,
+          placement: 'top',
+        });
+      navigation.navigate('Home');
+    }else{
+      toast.show(res.error, {
+        type: 'error',
+        topOffset: 20,
+        bottomOffset: 80,
+        duration: 4000,
+        placement: 'top',
+      });
+      setLoginData({
+        email: '',
+        password: '',
+      })
     }
+  }
 
   return (
     <View style={[
@@ -36,7 +70,7 @@ const Login = () => {
               styles.label,
               {color:color==='dark'?"white":"black"}
             ]}>Email</Text>
-            <TextInput onChangeText={(e)=>{
+            <TextInput value={loginData.email} onChangeText={(e)=>{
                 setLoginData({...loginData, email: e })
             }} style={[
               {borderColor:color==='dark'?"white":"black"},
@@ -47,19 +81,21 @@ const Login = () => {
               styles.label,
               {color:color==='dark'?"white":"black"}
             ]}>Password</Text>
-            <TextInput onChangeText={(e)=>{
+            <TextInput value={loginData.password} onChangeText={(e)=>{
                 setLoginData({...loginData, password: e })
             }} style={[
               {borderColor:color==='dark'?"white":"black"},
               {color:color=='dark'?"white":"black"},
               styles.input
             ]} secureTextEntry={true} placeholder='Enter your password' />
+
             <TouchableOpacity disabled={isDisabled} onPress={handleLogin} style={styles.button}>
                 <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
             <TouchableOpacity>
                 <Text style={styles.forgotText}>Forgot Password?</Text>
             </TouchableOpacity>
+
             <TouchableOpacity onPress={()=>{
               navigation.navigate("Sign up")
             }}>

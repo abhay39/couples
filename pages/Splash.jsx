@@ -1,16 +1,27 @@
-import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View,StatusBar,useColorScheme } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Splash = () => {
   const navigation=useNavigation();
+  const color=useColorScheme();
 
-    setTimeout(()=>{
-      navigation.navigate('Sign in') // Fixed: 'Sign in' -> 'SignIn'
+  const isToken= AsyncStorage.getItem('token');
+  console.log("Token",isToken)
+  if(isToken){
+    setTimeout(async()=>{
+      navigation.navigate('MyTabs')
     },3000)
+  }else{
+    setTimeout(async()=>{
+      navigation.navigate('Sign in')
+    },3000)
+  }
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle={'white'} backgroundColor={'#fb6f92'}/>
       {/* <ImageBackground source={{uri:"https://www.logo-designer.co/storage/2021/02/2021-collins-new-logo-design-dating-site-match.png"}} style={styles.background}>
       </ImageBackground> */}
       {/* <Image source={require("../images/logo.jpg")} alt='logo' height={150} width={150}/> */}
@@ -21,7 +32,7 @@ const Splash = () => {
         <Text style={{
             fontSize:80,
             fontWeight:'bold',
-            color:'red'
+            color:'white'
         }}>match❤</Text>
     </View>
   )

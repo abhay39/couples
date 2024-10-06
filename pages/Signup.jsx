@@ -1,9 +1,11 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native'
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, useColorScheme, View,  } from 'react-native'
 import React, { useState } from 'react'
 import { Picker } from '@react-native-picker/picker'
 import { useNavigation } from '@react-navigation/native'
 import { API_URL } from '@env';
-
+import { useToast } from 'react-native-toast-notifications';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios'
 
 const Signup = () => {
   const color=useColorScheme();
@@ -17,15 +19,70 @@ const Signup = () => {
   })
 
   const isDisabled=!loginData.email || !loginData.password || !loginData.fullName || !loginData.gender || !loginData.age
+  const toast=useToast();
 
+  const handleLogin = async () => {
+    try {
+      // Check age constraint
+      if (loginData.age < 18) {
+        return toast.show('Your age must be 18 or above to create an account', {
+          type: 'warning',
+          topOffset: 20,
+          bottomOffset: 80,
+          duration: 4000,
+          placement: 'top',
+        });
+      }
+    
+      // Make the API request
+      const response = await fetch(`${API_URL}/auth/register-account`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
+      });
+  
 
-  const handleLogin=async()=>{
-    if(loginData.age<18){
-      
+      const resData = await response.json();
+
+      console.log("Reeded", resData)
+  
+      if (response.status === 201) {
+        // Store token and navigate on success
+        await AsyncStorage.setItem('token', resData.token);
+        toast.show(resData.message, {
+          type: 'success',
+          topOffset: 20,
+          bottomOffset: 80,
+          duration: 4000,
+          placement: 'top',
+        });
+        navigation.navigate('Home');
+      } else {
+        // Display error toast if status isn't 201
+        toast.show(resData.error, {
+          type: 'error',
+          topOffset: 20,
+          bottomOffset: 80,
+          duration: 4000,
+          placement: 'top',
+        });
+      }
+    } catch (error) {
+      // Handle network or unexpected errors
+      toast.show('Something went wrong. Please try again later.', {
+        type: 'error',
+        topOffset: 20,
+        bottomOffset: 80,
+        duration: 4000,
+        placement: 'top',
+      });
+      console.error('Login Error:', error);
     }
-    console.log(loginData)
-  }
+  };
 
+  
   return (
     <View style={[
       { backgroundColor: color === 'dark' ? 'black' : 'white' }, 
