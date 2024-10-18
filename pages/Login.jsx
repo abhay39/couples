@@ -35,7 +35,7 @@ const Login = () => {
           duration: 4000,
           placement: 'top',
         });
-      navigation.navigate('Home');
+      navigation.navigate('MyTabs');
     }else{
       toast.show(res.error, {
         type: 'error',

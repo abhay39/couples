@@ -20,6 +20,6 @@ const styles = StyleSheet.create({
     backgroundColor:'#ced4da',
     paddingTop:30,
     paddingBottom:10,
-    paddingHorizontal:20,
+    paddingHorizontal:10,
   }
 })

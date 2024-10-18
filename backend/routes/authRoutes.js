@@ -1,5 +1,5 @@
 import express from "express";
-import { CreateAccount,loginAccount } from "../controllers/AuthControllers.js";
+import { CreateAccount,getUser,loginAccount } from "../controllers/AuthControllers.js";
 
 
 const routes=express.Router()
@@ -19,5 +19,6 @@ routes.get('/couples', (req, res) => {
 
 routes.post("/register-Account",CreateAccount)
 routes.post("/login",loginAccount)
+routes.get("/getUser/:token",getUser)
 
 export default routes

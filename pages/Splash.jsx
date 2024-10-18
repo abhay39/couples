@@ -1,20 +1,39 @@
 import { Image, StyleSheet, Text, View,StatusBar,useColorScheme } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import { setUserDetails,setUserToken } from '../store/UserDetails';
+import { useToast } from 'react-native-toast-notifications';
 
 const Splash = () => {
   const navigation=useNavigation();
   const color=useColorScheme();
+  const dispatch=useDispatch();
+  const toast=useToast();
+  const [token,setToken]=useState('');
+    
+  
+ 
 
-  const isToken= AsyncStorage.getItem('token');
-  console.log("Token",isToken)
-  if(isToken){
-    setTimeout(async()=>{
+  useEffect(()=>{
+    const getToken=async()=>{
+      const token=await AsyncStorage.getItem('token');
+      setToken(token);
+      dispatch(setUserToken(token))
+    }
+    getToken();
+    
+  },[]);
+
+
+  if(token){
+    setTimeout(()=>{
       navigation.navigate('MyTabs')
     },3000)
+    // getUserDetails(token);
   }else{
-    setTimeout(async()=>{
+    setTimeout(()=>{
       navigation.navigate('Sign in')
     },3000)
   }

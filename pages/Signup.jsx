@@ -58,7 +58,7 @@ const Signup = () => {
           duration: 4000,
           placement: 'top',
         });
-        navigation.navigate('Home');
+        navigation.navigate('MyTabs');
       } else {
         // Display error toast if status isn't 201
         toast.show(resData.error, {

@@ -7,6 +7,7 @@ import HomeScreen from '../pages/HomeScreen';
 import Splash from '../pages/Splash';
 import { StatusBar, useColorScheme } from 'react-native';
 import MyTabs from './BottomTabs';
+import MessageScreen from '../pages/MessageScreen';
 
 const Stack=createNativeStackNavigator();
 const StackNavigator = () => {
@@ -23,6 +24,7 @@ const StackNavigator = () => {
         </Stack.Group>
         <Stack.Group>
             <Stack.Screen name="MyTabs" component={MyTabs} />
+            <Stack.Screen name="MessageScreen" component={MessageScreen} />
         </Stack.Group>
     </Stack.Navigator>
   )

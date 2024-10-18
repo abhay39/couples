@@ -9,7 +9,7 @@ export const CreateAccount=async(req,res)=>{
             email:data.email
         })
         if(checkIfUser){
-            return res.status(400).json({error:"User already exists"});
+            res.status(400).json({error:"User already exists"});
         }
 
         const hashedPassword=await bcrypt.hash(data.password,10);
@@ -41,11 +41,11 @@ export const CreateAccount=async(req,res)=>{
 export const loginAccount=async(req, res) => {
     try{
         const {email, password}=req.body;
-        console.log(email,password)
+        // console.log(email,password)
         const user=await User.findOne({
             email:email
         });
-        console.log("Email",user)
+        // console.log("Email",user)
         if(user){
             const isMatch=await bcrypt.compare(password,user.password);
             if(isMatch){
@@ -62,6 +62,22 @@ export const loginAccount=async(req, res) => {
         }
         else{
             res.status(400).json({error:"User not found"});
+        }
+    }catch(err){
+        res.status(500).json({error:err.message});
+    }
+}
+
+export const getUser=async(req,res) => {
+    try{
+        const {token}=req.params;
+        const decoded=jwt.verify(token,process.env.JWT_SEC);
+        const user=await User.findById(decoded.id);
+        if(user){
+            res.status(200).json(user);
+        }
+        else{
+            res.status(404).json({error:"User not found"});
         }
     }catch(err){
         res.status(500).json({error:err.message});

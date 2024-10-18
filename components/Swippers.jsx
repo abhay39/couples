@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     card: {
-        width: '90%', // Set a fixed width for cards
+        width: '95%', // Set a fixed width for cards
         // height: 600,
         borderRadius: 20,
         backgroundColor: "white",

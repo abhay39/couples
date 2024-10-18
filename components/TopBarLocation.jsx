@@ -58,6 +58,11 @@ const TopBarLocation = () => {
         flexDirection:'row',
         alignItems: 'center',
         justifyContent:'space-between',
+        backgroundColor:"white",
+        padding:10,
+        paddingLeft:10,
+        paddingRight:10,
+        borderRadius:10
     }}>
         <View style={{display:'flex', flexDirection:'row',alignItems:"center",justifyContent:'center'}}>
           <Text><EvilIcons name="location" size={24} color="#4F8EF7" /></Text>
@@ -69,7 +74,6 @@ const TopBarLocation = () => {
           <View style={{ width: 24, height: 24, borderRadius: 12, padding: 2, backgroundColor: 'black', position: 'absolute', top: -4, right: -3, alignItems: 'center', justifyContent: 'center' }}>
           <Text style={{ fontSize: 12, color: 'white' }}>3</Text>
         </View>
-
         </TouchableOpacity>
     </View>
   )
