@@ -1,8 +1,9 @@
 import { Button, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Swiper from 'react-native-deck-swiper'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Entypo from 'react-native-vector-icons/Entypo'
+import { useSelector } from 'react-redux'
 
 const maleProfiles = [
     {
@@ -68,11 +69,23 @@ const maleProfiles = [
 
 const Swippers = () => {
 
+    const userDetails = useSelector(state => state.userDetails);
     const [allSwiped, setAllSwiped] = useState(false);
     const [openModel, setOpenModel] = useState({
         visible: false,
         index: 0
     });
+
+    console.log(userDetails.token)
+    const getAllUsers=async()=>{
+        let res=  await fetch(`${process.env.API_URL}/auth/allUsers/getAllUsers/${userDetails.token}`)
+        const resData=await res.json();
+        console.log(resData)
+    }
+
+    useEffect(()=>{
+        getAllUsers()
+    },[])
 
     const swipeRight = (cardIndex) => {
         console.log(`Right swiped on ${maleProfiles[cardIndex]?.name}`);

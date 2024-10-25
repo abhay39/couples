@@ -1,8 +1,9 @@
 import express from 'express';
-import { getAllUsers } from '../controllers/UserControllers';
+import { addUserRightSwiped, getAllUsers } from '../controllers/UserControllers.js';
 
-const app = express.Router();
+const usersRelatedRoutes = express.Router();
 
-app.get("/getAllUsers/:token",getAllUsers)
+usersRelatedRoutes.get("/getAllUsers/:token",getAllUsers)
+usersRelatedRoutes.get("/rightSwiped",addUserRightSwiped)
 
-export default usersRoutes;
+export default usersRelatedRoutes;
