@@ -4,6 +4,7 @@ import Swiper from 'react-native-deck-swiper'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Entypo from 'react-native-vector-icons/Entypo'
 import { useSelector } from 'react-redux'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const maleProfiles = [
     {
@@ -69,30 +70,34 @@ const maleProfiles = [
 
 const Swippers = () => {
 
-    const userDetails = useSelector(state => state.userDetails);
     const [allSwiped, setAllSwiped] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [openModel, setOpenModel] = useState({
         visible: false,
         index: 0
     });
+    const [allUsers, setAllUsers] = useState([])
 
-    console.log(userDetails.token)
-    const getAllUsers=async()=>{
-        let res=  await fetch(`${process.env.API_URL}/auth/allUsers/getAllUsers/${userDetails.token}`)
-        const resData=await res.json();
-        console.log(resData)
+    const getAllUsers = async () => {
+        setLoading(true)
+        const token = await AsyncStorage.getItem('token');
+        console.log("Token: ", token)
+        let res = await fetch(`${process.env.API_URL}/allUsers/getAllUsers/${token}`)
+        resData = await res.json();
+        setAllUsers(resData)
+        setLoading(false)
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         getAllUsers()
-    },[])
+    }, [])
 
     const swipeRight = (cardIndex) => {
-        console.log(`Right swiped on ${maleProfiles[cardIndex]?.name}`);
+        console.log(`Right swiped on ${allUsers[cardIndex]?.fullName}`);
     };
 
     const swipeLeft = (cardIndex) => {
-        console.log(`Left swiped on ${maleProfiles[cardIndex]?.name}`);
+        console.log(`Left swiped on ${allUsers[cardIndex]?.fullName}`);
     };
 
     const swipeRef = useRef(null);
@@ -116,62 +121,64 @@ const Swippers = () => {
                 <Swiper
                     ref={swipeRef}
                     verticalSwipe={false}
-                    cards={maleProfiles}
-                    renderCard={(card, index) => (
-                        <View style={styles.card} key={index}>
-                            <Image
-                                source={{ uri: card.imageUrl }}
-                                alt="image"
-                                style={{
-                                    height: 400,
+                    cards={allUsers}
+                    renderCard={(card, index) => {
+                        console.log("Card: ",card)
+                        return (
+                            <View style={styles.card} key={index}>
+                                <Image
+                                    source={{ uri: card?.imageUrl || "https://static.india.com/wp-content/uploads/2024/02/Akshay-Kumar-2.jpg?impolicy=Medium_Widthonly&w=400" }}
+                                    alt="image"
+                                    style={{
+                                        height: 400,
+                                        width: '100%',
+                                        borderTopLeftRadius: 20,
+                                        borderTopRightRadius: 20,
+                                        objectFit: 'cover'
+                                    }}
+                                />
+                                <View style={{ backgroundColor: 'white', padding: 5, paddingLeft: 10 }}>
+                                    <Text style={styles.text}>{card?.fullName} {card.isVerified}</Text>
+                                    <Text style={styles.text2}>{card?.job}, {card?.age}, {card?.gender.toUpperCase()}</Text>
+                                    <Text style={styles.text1}>{card?.bio || "A passionate and outgoing individual who loves to travel and explore new places."}</Text>
+                                </View>
+                                <View style={{
                                     width: '100%',
-                                    borderTopLeftRadius: 20,
-                                    borderTopRightRadius: 20,
-                                    objectFit: 'cover'
-                                }}
-                            />
-                            <View style={{ backgroundColor: 'white', padding: 5, paddingLeft: 10 }}>
-                                <Text style={styles.text}>{card.name}</Text>
-                                <Text style={styles.text2}>{card.job}, {card.age}</Text>
-                                <Text style={styles.text1}>{card.bio}</Text>
-                            </View>
-                            <View style={{
-                                width: '100%',
-                                borderWidth: 1,
-                                borderColor: '#bdadad'
-                            }} />
-                            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', marginTop: 10, marginBottom: 20 }}>
-                                <TouchableOpacity style={{
-                                    borderRadius: 100,
-                                    padding: 10,
-                                    backgroundColor: 'red',
-                                    borderRadius: 20,
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }} onPress={() => {
-                                    swipeRef.current.swipeLeft()
-                                }}>
-                                    <Entypo name='cross' size={40} color='white' />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => {
-                                    swipeRef.current.swipeRight()
-                                }} style={{
-                                    borderRadius: 100,
-                                    padding: 10,
-                                    backgroundColor: 'green',
-                                    borderRadius: 20,
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}>
-                                    <AntDesign name='heart' size={40} color='white' />
-                                </TouchableOpacity>
-                            </View>
-                            <View style={{
-                                width: '100%',
-                                borderWidth: 1,
-                                borderColor: '#bdadad'
-                            }} />
-                            {/* <TouchableOpacity style={{
+                                    borderWidth: 1,
+                                    borderColor: '#bdadad'
+                                }} />
+                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', marginTop: 10, marginBottom: 20 }}>
+                                    <TouchableOpacity style={{
+                                        borderRadius: 100,
+                                        padding: 10,
+                                        backgroundColor: 'red',
+                                        borderRadius: 20,
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }} onPress={() => {
+                                        swipeRef.current.swipeLeft()
+                                    }}>
+                                        <Entypo name='cross' size={40} color='white' />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => {
+                                        swipeRef.current.swipeRight()
+                                    }} style={{
+                                        borderRadius: 100,
+                                        padding: 10,
+                                        backgroundColor: 'green',
+                                        borderRadius: 20,
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        <AntDesign name='heart' size={40} color='white' />
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{
+                                    width: '100%',
+                                    borderWidth: 1,
+                                    borderColor: '#bdadad'
+                                }} />
+                                {/* <TouchableOpacity style={{
                                 marginTop: 5,
                                 marginBottom: 5,
                                 display: 'flex',
@@ -187,8 +194,9 @@ const Swippers = () => {
                                 <Text>See more of him..</Text>
                             </TouchableOpacity> */}
 
-                        </View>
-                    )}
+                            </View>
+                        )
+                    }}
                     onSwiped={(cardIndex) => console.log('Card Index:', cardIndex)}
                     onSwipedLeft={(cardIndex) => {
                         swipeLeft(cardIndex)
@@ -226,31 +234,31 @@ const Swippers = () => {
             {
                 openModel.visible && (
                     <View style={{ flex: 1, width: '100%' }}>
-                        <FlatList 
+                        <FlatList
                             data={maleProfiles[openModel.index].imagesArray}
-                            renderItem={(item)=>{
+                            renderItem={(item) => {
                                 return (
                                     <View
-                                            key={item.id}
+                                        key={item.id}
+                                        style={{
+                                            marginBottom: 20,
+                                            backgroundColor: 'white',
+                                            padding: 10,
+                                            borderRadius: 15
+                                        }}
+                                    >
+                                        <Image
+                                            source={{ uri: item.url }}
+                                            alt="image"
                                             style={{
-                                                marginBottom: 20,
-                                                backgroundColor: 'white',
-                                                padding: 10,
-                                                borderRadius: 15
+                                                height: 400,
+                                                width: '100%',
+                                                borderRadius: 20,
+                                                resizeMode: 'cover',
                                             }}
-                                        >
-                                            <Image
-                                                source={{ uri: item.url  }}
-                                                alt="image"
-                                                style={{
-                                                    height: 400,
-                                                    width: '100%',
-                                                    borderRadius: 20,
-                                                    resizeMode: 'cover',
-                                                }}
-                                            />
-                                            <Text style={{ color: 'black', fontSize: 16 }}>{item.description}</Text>
-                                        </View>
+                                        />
+                                        <Text style={{ color: 'black', fontSize: 16 }}>{item.description}</Text>
+                                    </View>
                                 )
                             }}
                         />

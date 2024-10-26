@@ -1,14 +1,16 @@
 import UserMatch from "../modal/userMatchModel.js";
 import User from "../modal/userModel.js";
+import jwt from 'jsonwebtoken'
 
 export const getAllUsers=async(req,res)=>{
     try{
         const {token}=req.params;
         const decoded=jwt.verify(token,process.env.JWT_SEC);
         const currentUser=decoded.id;
+        console.log(currentUser)
 
         const getAll=await User.find();
-        const exceptCurrentUser=getAll.filter(item=>item._id!==currentUser)
+        const exceptCurrentUser = getAll.filter(item => item._id.toString() !== currentUser);
         res.status(200).json(exceptCurrentUser);
     }catch(err){
         res.status(500).json({error:err.message});
