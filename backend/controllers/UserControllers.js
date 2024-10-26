@@ -40,6 +40,7 @@ export const addUserRightSwiped=async()=>{
         res.status(500).json({error:err.message});
     }
 }
+
 export const addUserLeftSwipeed=async()=>{
     try{
         const {currentUserId,swipedUserId} = req.params;

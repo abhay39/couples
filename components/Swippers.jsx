@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Swiper from 'react-native-deck-swiper'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Entypo from 'react-native-vector-icons/Entypo'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -70,8 +71,10 @@ const maleProfiles = [
 
 const Swippers = () => {
 
+    const userDetails=useSelector(item=>item.userDetails)
+
+    console.log(userDetails)
     const [allSwiped, setAllSwiped] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [openModel, setOpenModel] = useState({
         visible: false,
         index: 0
@@ -79,25 +82,39 @@ const Swippers = () => {
     const [allUsers, setAllUsers] = useState([])
 
     const getAllUsers = async () => {
-        setLoading(true)
         const token = await AsyncStorage.getItem('token');
-        console.log("Token: ", token)
+        // console.log("Token: ", token)
         let res = await fetch(`${process.env.API_URL}/allUsers/getAllUsers/${token}`)
         resData = await res.json();
         setAllUsers(resData)
-        setLoading(false)
     }
 
     useEffect(() => {
         getAllUsers()
     }, [])
 
-    const swipeRight = (cardIndex) => {
-        console.log(`Right swiped on ${allUsers[cardIndex]?.fullName}`);
+    const swipeRight = async(cardIndex) => {
+        const swipedUserId=allUsers[cardIndex]?._id;
+        // try{
+        //     let res= await fetch(`${process.env.API_URL}/allUsers/rightSwiped`,{
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify({
+        //             swipedUserId: swipedUserId,
+        //             currentUserId: userDetails._id
+        //         })
+        //     })
+        // }catch(err){
+        //     console.log("Error: ",err.message)
+        // }
+        console.log("swipedUserId", swipedUserId, "currentUserId",userDetails.userInfo._id)
     };
 
     const swipeLeft = (cardIndex) => {
-        console.log(`Left swiped on ${allUsers[cardIndex]?.fullName}`);
+        const swipedUserId=allUsers[cardIndex]?._id;
+
     };
 
     const swipeRef = useRef(null);
@@ -113,7 +130,7 @@ const Swippers = () => {
                     />
                     <Text style={{
                         fontSize: 25,
-                        fontWeight: 'black'
+                        fontWeight: 'bold',
                     }}>No profile left</Text>
 
                 </View>
@@ -123,7 +140,7 @@ const Swippers = () => {
                     verticalSwipe={false}
                     cards={allUsers}
                     renderCard={(card, index) => {
-                        console.log("Card: ",card)
+                        // console.log("Card: ",card)
                         return (
                             <View style={styles.card} key={index}>
                                 <Image
@@ -138,7 +155,7 @@ const Swippers = () => {
                                     }}
                                 />
                                 <View style={{ backgroundColor: 'white', padding: 5, paddingLeft: 10 }}>
-                                    <Text style={styles.text}>{card?.fullName} {card.isVerified}</Text>
+                                    <Text style={styles.text}>{card?.fullName} {card?.isVerified===true && (<MaterialIcons name='verified' size={20} color='blue' />) }</Text>
                                     <Text style={styles.text2}>{card?.job}, {card?.age}, {card?.gender.toUpperCase()}</Text>
                                     <Text style={styles.text1}>{card?.bio || "A passionate and outgoing individual who loves to travel and explore new places."}</Text>
                                 </View>
@@ -291,6 +308,9 @@ const styles = StyleSheet.create({
         elevation: 6,
     },
     text: {
+        display:"flex",
+        flexDirection:"row",
+        alignItems:"center",
         fontSize: 28,
         color: "black",
         fontWeight: '900'

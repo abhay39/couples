@@ -4,6 +4,6 @@ import { addUserRightSwiped, getAllUsers } from '../controllers/UserControllers.
 const usersRelatedRoutes = express.Router();
 
 usersRelatedRoutes.get("/getAllUsers/:token",getAllUsers)
-usersRelatedRoutes.get("/rightSwiped",addUserRightSwiped)
+usersRelatedRoutes.post("/rightSwiped",addUserRightSwiped)
 
 export default usersRelatedRoutes;
