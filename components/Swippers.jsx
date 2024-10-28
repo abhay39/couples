@@ -72,8 +72,6 @@ const maleProfiles = [
 const Swippers = () => {
 
     const userDetails=useSelector(item=>item.userDetails)
-
-    // console.log(userDetails)
     const [allSwiped, setAllSwiped] = useState(false);
     const [openModel, setOpenModel] = useState({
         visible: false,
@@ -116,8 +114,6 @@ const Swippers = () => {
                     index: cardIndex
                 })
             }
-            
-            console.log("Res: ",res)
         }catch(err){
             console.log("Error: ",err.message)
         }

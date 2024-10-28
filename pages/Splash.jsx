@@ -8,13 +8,8 @@ import { useToast } from 'react-native-toast-notifications';
 
 const Splash = () => {
   const navigation=useNavigation();
-  const color=useColorScheme();
   const dispatch=useDispatch();
-  const toast=useToast();
   const [token,setToken]=useState('');
-    
-  
- 
 
   useEffect(()=>{
     const getToken=async()=>{
