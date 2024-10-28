@@ -29,6 +29,7 @@ const UserModel=new mongoose.Schema({
     },
     profileImage:{
         type:String,
+        default:"https://static.india.com/wp-content/uploads/2024/02/Akshay-Kumar-2.jpg?impolicy=Medium_Widthonly&w=400"
     },
     dateOfBirth:{
         type:Date,

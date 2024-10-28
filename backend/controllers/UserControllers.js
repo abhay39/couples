@@ -17,31 +17,45 @@ export const getAllUsers=async(req,res)=>{
     }
 }
 
-export const addUserRightSwiped=async()=>{
-    try{
-        const {currentUserId,swipedUserId} = req.params;
-        const ifRightSwiped = await User.findOne({
-            $or: [
-                { currentUserId: currentUserId, swipedUserId: swipedUserId },
-                { currentUserId: swipedUserId, swipedUserId: currentUserId }
-            ]
-        });
+export const addUserRightSwiped = async (req, res) => {
+    try {
+        const { currentUserId, swipedUserId } = req.body;
 
-        if(ifRightSwiped){
-            res.status(202).json({error: "User has already swiped on each other."});
+        // Check if the swiped user has already swiped right on the current user
+        const mutualSwipe = await UserMatch.findOne({
+            currentUserId: swipedUserId,
+            swipedUserId: currentUserId
+        }).populate('currentUserId').populate('swipedUserId') 
+        if (mutualSwipe) {
+            const currentUser=await User.findById(currentUserId).select("-password")
+            const swipedUser=await User.findById(swipedUserId).select("-password")
+            return res.status(200).json({
+                message: "It's a match!",
+                users: {
+                    currentUser: currentUser,
+                    matchedUser:swipedUser
+                }
+            });
         }
-        const addNewSwiped=await User({
-            currentUserId: currentUserId,
-            swipedUserId: swipedUserId
-        })
-        await addNewSwiped.save();
-        res.status(201).json({message: "Swiped on right successfully!."});
-    }catch(err){
-        res.status(500).json({error:err.message});
-    }
-}
 
-export const addUserLeftSwipeed=async()=>{
+        // Otherwise, add the current swipe to the database
+        const newSwipe = new UserMatch({
+            currentUserId,
+            swipedUserId
+        });
+        await newSwipe.save();
+
+        res.status(201).json({ message: "Swiped right successfully!" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+
+
+
+
+export const addUserLeftSwipeed=async(req,res)=>{
     try{
         const {currentUserId,swipedUserId} = req.params;
         const ifRightSwipped = await User.findOne({
@@ -52,7 +66,7 @@ export const addUserLeftSwipeed=async()=>{
         });
 
         if(ifRightSwipped){
-            res.status(202).json({error: "User has already swiped on each other."});
+            return res.status(202).json({error: "User has already swiped on each other."});
         }
         const addNewSwiped=await User({
             currentUserId: currentUserId,

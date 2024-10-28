@@ -73,13 +73,14 @@ const Swippers = () => {
 
     const userDetails=useSelector(item=>item.userDetails)
 
-    console.log(userDetails)
+    // console.log(userDetails)
     const [allSwiped, setAllSwiped] = useState(false);
     const [openModel, setOpenModel] = useState({
         visible: false,
-        index: 0
+        userData: ""
     });
     const [allUsers, setAllUsers] = useState([])
+    
 
     const getAllUsers = async () => {
         const token = await AsyncStorage.getItem('token');
@@ -95,21 +96,32 @@ const Swippers = () => {
 
     const swipeRight = async(cardIndex) => {
         const swipedUserId=allUsers[cardIndex]?._id;
-        // try{
-        //     let res= await fetch(`${process.env.API_URL}/allUsers/rightSwiped`,{
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({
-        //             swipedUserId: swipedUserId,
-        //             currentUserId: userDetails._id
-        //         })
-        //     })
-        // }catch(err){
-        //     console.log("Error: ",err.message)
-        // }
-        console.log("swipedUserId", swipedUserId, "currentUserId",userDetails.userInfo._id)
+        try{
+            let res= await fetch(`${process.env.API_URL}/allUsers/rightSwiped`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    swipedUserId: swipedUserId,
+                    currentUserId: userDetails.userInfo._id
+                })
+            })
+            const status=res.status;
+            res=await res.json();
+            if(status==200){
+                console.log("Res: ",res)
+                setOpenModel({
+                    visible: true,
+                    index: cardIndex
+                })
+            }
+            
+            console.log("Res: ",res)
+        }catch(err){
+            console.log("Error: ",err.message)
+        }
+        // console.log("swipedUserId", swipedUserId, "currentUserId",userDetails.userInfo._id)
     };
 
     const swipeLeft = (cardIndex) => {
@@ -214,7 +226,7 @@ const Swippers = () => {
                             </View>
                         )
                     }}
-                    onSwiped={(cardIndex) => console.log('Card Index:', cardIndex)}
+                    // onSwiped={}
                     onSwipedLeft={(cardIndex) => {
                         swipeLeft(cardIndex)
                     }}
@@ -248,40 +260,7 @@ const Swippers = () => {
                 />
             )}
 
-            {
-                openModel.visible && (
-                    <View style={{ flex: 1, width: '100%' }}>
-                        <FlatList
-                            data={maleProfiles[openModel.index].imagesArray}
-                            renderItem={(item) => {
-                                return (
-                                    <View
-                                        key={item.id}
-                                        style={{
-                                            marginBottom: 20,
-                                            backgroundColor: 'white',
-                                            padding: 10,
-                                            borderRadius: 15
-                                        }}
-                                    >
-                                        <Image
-                                            source={{ uri: item.url }}
-                                            alt="image"
-                                            style={{
-                                                height: 400,
-                                                width: '100%',
-                                                borderRadius: 20,
-                                                resizeMode: 'cover',
-                                            }}
-                                        />
-                                        <Text style={{ color: 'black', fontSize: 16 }}>{item.description}</Text>
-                                    </View>
-                                )
-                            }}
-                        />
-                    </View>
-                )
-            }
+           
 
         </View>
     )
@@ -292,13 +271,12 @@ export default Swippers;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "", // Set container background to white
-        alignItems: "center", // Center the Swiper
+        backgroundColor: "",
+        alignItems: "center",
         justifyContent: "center",
     },
     card: {
-        width: '95%', // Set a fixed width for cards
-        // height: 600,
+        width: '90%',
         borderRadius: 20,
         backgroundColor: "white",
         shadowColor: "#000",
